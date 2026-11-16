@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Conecta OIAEU</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="pagina-login">
+
+    <!-- CABEÇALHO -->
+    <header class="header">
+
+        <a href="/" class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Conecta OIAEU">
+        </a>
+
+        <a href="/" class="login-adm">
+            Voltar ao início
+        </a>
+
+    </header>
+
+    <!-- CONTEÚDO -->
+    <main class="login-container">
+
+        <section class="login-card">
+
+            <div class="login-titulo">
+
+                <span>BEM-VINDO DE VOLTA!</span>
+
+                <h1>Acesse sua conta</h1>
+
+                <p>
+                    Entre na plataforma e continue fazendo
+                    parte dessa transformação.
+                </p>
+
+            </div>
+
+            <!-- ALTERNAR TIPO DE LOGIN -->
+
+            <div class="tipo-login">
+
+                <button
+                    type="button"
+                    id="btn-voluntario"
+                    class="ativo"
+                    onclick="selecionarLogin('voluntario')">
+
+                    Voluntário
+
+                </button>
+
+                <button
+                    type="button"
+                    id="btn-adm"
+                    onclick="selecionarLogin('administrador')">
+
+                    Administrador
+
+                </button>
+
+            </div>
+
+            <!-- FORMULÁRIO -->
+
+            <form action="/login" method="POST">
+
+                <input
+                    type="hidden"
+                    name="tipo_usuario"
+                    id="tipo_usuario"
+                    value="voluntario">
+
+                {% if erro %}
+                    <div class="mensagem-erro">
+                        {{ erro }}
+                    </div>
+                {% endif %}
+
+                <div class="campo">
+
+                    <label for="email">E-mail</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Digite seu e-mail"
+                        autocomplete="email"
+                        required>
+
+                </div>
+
+                <div class="campo">
+
+                    <label for="senha">Senha</label>
+
+                    <input
+                        type="password"
+                        id="senha"
+                        name="senha"
+                        placeholder="Digite sua senha"
+                        autocomplete="current-password"
+                        required>
+
+                </div>
+
+                <button type="submit" class="btn-entrar">
+                    Entrar
+                </button>
+
+            </form>
+
+            <p class="cadastro-link" id="link-cadastro">
+
+                Ainda não possui cadastro?
+
+                <a href="/cadastro">Cadastre-se</a>
+
+            </p>
+
+        </section>
+
+    </main>
+
+    <!-- SCRIPT PARA ALTERNAR LOGIN -->
+
+    <script>
+
+        function selecionarLogin(tipo) {
+
+            const btnVoluntario = document.getElementById("btn-voluntario");
+            const btnAdm = document.getElementById("btn-adm");
+
+            const tipoUsuario = document.getElementById("tipo_usuario");
+            const linkCadastro = document.getElementById("link-cadastro");
+
+            tipoUsuario.value = tipo;
+
+            if (tipo === "voluntario") {
+
+                btnVoluntario.classList.add("ativo");
+                btnAdm.classList.remove("ativo");
+
+                linkCadastro.style.display = "block";
+
+            } else {
+
+                btnAdm.classList.add("ativo");
+                btnVoluntario.classList.remove("ativo");
+
+                linkCadastro.style.display = "none";
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>

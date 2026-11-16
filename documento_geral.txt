@@ -1,0 +1,291 @@
+📁 DOCUMENTAÇÃO GERAL — PROJETO CONECTA OIAEU
+
+♡ Conecta OIAEU
+
+Plataforma de conexão entre profissionais voluntários e oportunidades de atuação social.
+
+Aplicação Web Responsiva | MVP | Desenvolvimento individual
+
+1. Sobre o projeto
+
+O Conecta OIAEU é uma plataforma web que tem como objetivo conectar profissionais voluntários às necessidades de atuação da OIAEU.
+
+A proposta surgiu da identificação da dificuldade de localizar profissionais com habilidades específicas para colaborar com as atividades sociais da instituição.
+
+A plataforma facilita o cadastro de voluntários, a divulgação de oportunidades, a realização de inscrições e o gerenciamento das solicitações por meio de um painel administrativo.
+
+Instituição parceira: OIAEU — https://www.oiaeu.org.br/
+
+2. Problema identificado
+
+A OIAEU enfrenta dificuldades para localizar e conectar profissionais voluntários com qualificações específicas às necessidades de seus projetos sociais.
+
+Essa situação pode limitar a realização de atividades educativas, culturais, recreativas e de apoio social destinadas às crianças, adolescentes e idosos atendidos pela instituição.
+
+Diante disso, o Conecta OIAEU busca oferecer uma solução digital que facilite a identificação de profissionais, organize as oportunidades disponíveis e centralize o gerenciamento das inscrições.
+
+3. Público-alvo
+
+Usuários diretos:
+
+Funcionários e coordenadores da OIAEU: responsáveis pelo cadastro e gerenciamento das oportunidades, acompanhamento das inscrições e aprovação ou recusa dos interessados.
+Profissionais voluntários: responsáveis pelo cadastro de seus perfis, consulta de oportunidades e realização de inscrições.
+
+Beneficiários indiretos:
+
+Crianças.
+Adolescentes.
+Idosos.
+Famílias atendidas pela instituição.
+4. Objetivo do MVP
+
+Desenvolver uma plataforma web simples, responsiva e intuitiva que permita:
+
+Cadastrar profissionais voluntários.
+Realizar autenticação de voluntários e administradores.
+Cadastrar e gerenciar oportunidades de voluntariado.
+Consultar vagas disponíveis.
+Realizar inscrições nas oportunidades.
+Impedir inscrições duplicadas na mesma vaga.
+Acompanhar as inscrições pelo painel administrativo.
+Aprovar ou recusar solicitações de voluntários.
+Consultar indicadores gerais do sistema.
+5. Tecnologias utilizadas
+Frontend
+HTML5: estrutura das páginas e formulários.
+CSS3: estilização, responsividade e identidade visual.
+Backend
+Python: linguagem utilizada no desenvolvimento da aplicação.
+Flask: framework utilizado para estruturar a aplicação, controlar as rotas e processar as solicitações.
+Werkzeug Security: utilizado para geração e verificação de hashes das senhas.
+Regex: utilizado para validações de dados, como endereço de e-mail e telefone.
+Banco de dados
+Microsoft SQL Server: armazenamento e gerenciamento das informações.
+SQL Server Management Studio (SSMS): gerenciamento e execução dos comandos SQL.
+PyODBC: biblioteca utilizada para conectar a aplicação Python ao SQL Server.
+Arquitetura escolhida
+
+Arquitetura monolítica em camadas (Three-Layer Architecture).
+
+View: interface apresentada ao usuário, desenvolvida em HTML e CSS.
+Controller: processamento das requisições e regras de negócio, desenvolvido com Flask.
+Model/Data Access: organização das operações e persistência dos dados, concentradas no arquivo database.py.
+6. Estrutura do banco de dados
+
+O banco de dados utilizado pelo projeto é denominado CONECTA_OIAEU, desenvolvido no Microsoft SQL Server.
+
+A estrutura atual possui quatro tabelas principais:
+
+Tabela 1 — Voluntario
+
+Armazena os dados pessoais e profissionais dos voluntários cadastrados, além das informações necessárias para autenticação e controle de acesso.
+
+Campo	Tipo
+id_voluntario	INT (PK)
+nome	VARCHAR(120)
+email	VARCHAR(150)
+telefone	VARCHAR(20)
+formacao	VARCHAR(100)
+habilidades	VARCHAR(255)
+disponibilidade	VARCHAR(100)
+data_cadastro	DATETIME2
+senha_hash	VARCHAR(255)
+ativo	BIT
+
+Observações:
+
+O e-mail possui restrição de unicidade.
+A senha é armazenada em formato hash.
+O campo ativo controla a situação do cadastro.
+A data de cadastro é preenchida automaticamente.
+Tabela 2 — Administrador
+
+Armazena os dados dos usuários responsáveis pelo gerenciamento da plataforma.
+
+Campo	Tipo
+id_administrador	INT (PK)
+nome	VARCHAR(120)
+email	VARCHAR(150)
+senha_hash	VARCHAR(255)
+data_cadastro	DATETIME2
+ativo	BIT
+
+Observações:
+
+O e-mail possui restrição de unicidade.
+A senha é armazenada em formato hash.
+O campo ativo controla a situação do administrador.
+Tabela 3 — Vaga
+
+Armazena as oportunidades de voluntariado cadastradas pelos administradores.
+
+Campo	Tipo
+id_vaga	INT (PK)
+titulo	VARCHAR(120)
+descricao	VARCHAR(500)
+area_atuacao	VARCHAR(100)
+requisitos	VARCHAR(255)
+data_publicacao	DATETIME2
+status	VARCHAR(20)
+
+Status possíveis:
+
+aberta.
+encerrada.
+
+A data de publicação é preenchida automaticamente e o status inicial de uma nova oportunidade é definido como aberta.
+
+Tabela 4 — Inscricao
+
+Registra as inscrições realizadas pelos voluntários nas oportunidades disponíveis.
+
+Campo	Tipo
+id_inscricao	INT (PK)
+id_voluntario	INT (FK)
+id_vaga	INT (FK)
+data_inscricao	DATETIME2
+status	VARCHAR(20)
+
+Status possíveis:
+
+pendente.
+aprovado.
+recusado.
+
+A inscrição é criada automaticamente com o status pendente.
+
+A tabela possui duas chaves estrangeiras que estabelecem os relacionamentos com Voluntario e Vaga.
+
+Também possui uma restrição de unicidade para impedir que um mesmo voluntário realize mais de uma inscrição na mesma oportunidade.
+
+Relacionamentos entre as tabelas
+Voluntario e Inscricao: um voluntário pode realizar várias inscrições (1:N).
+Vaga e Inscricao: uma vaga pode receber várias inscrições (1:N).
+Administrador: possui tabela própria para autenticação e controle de acesso administrativo.
+
+A tabela Inscricao funciona como ligação entre Voluntario e Vaga.
+
+Representação dos relacionamentos
+text
+VOLUNTARIO
+    |
+    | 1
+    |
+    | N
+INSCRICAO
+    |
+    | N
+    |
+    | 1
+   VAGA
+
+
+ADMINISTRADOR
+    |
+    | Gerencia
+    |
+    +------ VAGA
+    |
+    +------ INSCRICAO
+
+Regras de negócio implementadas
+Cada voluntário deve possuir um cadastro para acessar as oportunidades.
+O acesso ao sistema é realizado por meio de e-mail e senha.
+O sistema diferencia administradores e voluntários.
+Somente administradores podem cadastrar e gerenciar oportunidades.
+Voluntários podem realizar inscrições somente em vagas abertas.
+Um voluntário não pode se inscrever duas vezes na mesma vaga.
+Toda inscrição começa com o status pendente.
+O administrador pode aprovar ou recusar inscrições pendentes.
+O administrador pode ativar ou encerrar oportunidades.
+7. Estrutura de pastas do projeto
+
+A organização do projeto foi desenvolvida de forma centralizada, separando os arquivos responsáveis pelas rotas, operações com o banco de dados, páginas HTML, estilos e imagens.
+
+text
+projeto-conecta-oiaeu/
+│
+├── app.py
+├── database.py
+│
+├── templates/
+│   ├── index.html
+│   ├── cadastro.html
+│   ├── login.html
+│   ├── painel.html
+│   ├── cadastrar_vaga.html
+│   ├── vagas.html
+│   └── inscricoes.html
+│
+└── static/
+    │
+    ├── css/
+    │   └── style.css
+    │
+    └── images/
+        └── logo.png
+
+Descrição dos arquivos principais
+
+app.py
+
+Arquivo principal da aplicação Flask. Responsável por:
+
+Definir as rotas.
+Processar formulários.
+Validar informações.
+Controlar sessões de usuários.
+Realizar autenticação.
+Controlar o acesso de administradores e voluntários.
+Encaminhar as informações para as funções do banco de dados.
+
+database.py
+
+Responsável pela comunicação com o SQL Server. Contém:
+
+Função de conexão com o banco.
+Cadastro de voluntários.
+Busca de usuários para login.
+Cadastro e consulta de vagas.
+Atualização do status das vagas.
+Registro de inscrições.
+Consulta de indicadores administrativos.
+Operações de gerenciamento das inscrições.
+
+templates/
+
+Diretório que armazena as páginas HTML utilizadas pela aplicação.
+
+static/css/style.css
+
+Arquivo responsável pela identidade visual, estilização dos componentes e adaptação das páginas para diferentes tamanhos de tela.
+
+static/images/
+
+Diretório destinado às imagens utilizadas no sistema, incluindo o logotipo da instituição.
+
+8. Identidade visual atualizada
+
+A identidade visual do Conecta OIAEU foi desenvolvida com uma proposta colorida, acolhedora, moderna e intuitiva, buscando transmitir confiança, proximidade e facilidade de utilização.
+
+Paleta de cores
+Elemento	Cor	Código
+Cabeçalho	Roxo	#7952B3
+Botões de cadastro e destaque	Coral	#F36F55
+Botões de destaque secundário	Amarelo	#FFC400
+Botões de login e formulários	Azul	#0f89ec
+Fundo da página inicial	Branco quente	#FFFCF7
+Fundo das páginas internas	Cinza azulado claro	#F5F8FC
+Cartões e campos	Branco	#FFFFFF
+Títulos	Azul acinzentado	#536B9D
+
+O roxo foi escolhido como cor predominante da navegação, enquanto o coral, amarelo e azul são utilizados para destacar ações e funcionalidades.
+
+A interface utiliza cartões com bordas arredondadas, sombras suaves, botões destacados e formulários organizados.
+
+Também foram desenvolvidas regras de responsividade para adaptar as páginas a dispositivos móveis.
+
+9. Histórias de usuário definidas
+Usuário	Necessidade
+Voluntário	Cadastrar perfil, formação, habilidades e disponibilidade para encontrar oportunidades compatíveis.
+Administrador	Cadastrar e gerenciar oportunidades para encontrar profissionais adequados

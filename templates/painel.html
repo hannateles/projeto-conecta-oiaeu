@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Painel Administrativo | Conecta OIAEU</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="pagina-painel">
+
+    <!-- CABECALHO -->
+
+    <header class="header">
+
+        <a href="/" class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Conecta OIAEU">
+        </a>
+
+        <a href="/sair" class="login-adm">
+            Sair
+        </a>
+
+    </header>
+
+
+    <!-- CONTEUDO PRINCIPAL -->
+
+    <main class="painel-container">
+
+        <!-- BOAS-VINDAS -->
+
+        <section class="painel-boasvindas">
+
+            <span>ÁREA ADMINISTRATIVA</span>
+
+            <h1>Olá, Administrador!</h1>
+
+            <p>
+                Bem-vindo ao painel de gerenciamento do Conecta OIAEU.
+            </p>
+
+        </section>
+
+
+        <!-- INDICADORES -->
+
+        <section class="painel-indicadores">
+
+            <div class="indicador-card">
+
+                <div class="indicador-icone">👥</div>
+
+                <h2>{{ resumo.voluntarios }}</h2>
+
+                <p>Voluntários cadastrados</p>
+
+            </div>
+
+
+            <div class="indicador-card">
+
+                <div class="indicador-icone">💼</div>
+
+                <h2>{{ resumo.vagas }}</h2>
+
+                <p>Vagas cadastradas</p>
+
+            </div>
+
+
+            <div class="indicador-card">
+
+                <div class="indicador-icone">📋</div>
+
+                <h2>{{ resumo.inscricoes }}</h2>
+
+                <p>Inscrições realizadas</p>
+
+            </div>
+
+
+            <div class="indicador-card">
+
+                <div class="indicador-icone">⏳</div>
+
+                <h2>{{ resumo.pendentes }}</h2>
+
+                <p>Inscrições pendentes</p>
+
+            </div>
+
+
+            <div class="indicador-card">
+
+                <div class="indicador-icone">✅</div>
+
+                <h2>{{ resumo.aprovados }}</h2>
+
+                <p>Inscrições aprovadas</p>
+
+            </div>
+
+        </section>
+
+
+        <!-- GERENCIAMENTO -->
+
+        <section class="painel-acoes">
+
+
+            <!-- CADASTRAR NOVA VAGA -->
+
+            <div class="painel-acao-card">
+
+                <h2>Nova oportunidade</h2>
+
+                <p>
+                    Publique uma nova oportunidade de voluntariado
+                    para encontrar profissionais interessados.
+                </p>
+
+                <a href="/cadastrar-vaga" class="btn-painel">
+                    + Cadastrar nova vaga
+                </a>
+
+            </div>
+
+
+            <!-- VISUALIZAR VAGAS -->
+
+            <div class="painel-acao-card">
+
+                <h2>Gerenciar oportunidades</h2>
+
+                <p>
+                    Consulte, edite e acompanhe as oportunidades
+                    cadastradas na plataforma.
+                </p>
+
+                <a href="/vagas" class="btn-painel">
+                    Visualizar vagas
+                </a>
+
+            </div>
+
+
+            <!-- GERENCIAR INSCRICOES -->
+
+            <div class="painel-acao-card">
+
+                <h2>Gerenciar inscrições</h2>
+
+                <p>
+                    Consulte os voluntários inscritos e acompanhe
+                    suas solicitações.
+                </p>
+
+                <a href="/inscricoes" class="btn-painel">
+                    Visualizar inscrições
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

@@ -1,0 +1,372 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gerenciar Inscrições | Conecta OIAEU</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body class="pagina-inscricoes">
+
+    <!-- CABECALHO -->
+
+    <header class="header">
+
+        <a href="/" class="logo">
+
+            <img
+                src="{{ url_for('static', filename='images/logo.png') }}"
+                alt="Logo Conecta OIAEU">
+
+        </a>
+
+        <a href="/painel" class="login-adm">
+            Voltar ao painel
+        </a>
+
+    </header>
+
+
+    <!-- CONTEUDO PRINCIPAL -->
+
+    <main class="inscricoes-container">
+
+
+        <!-- APRESENTACAO -->
+
+        <section class="inscricoes-cabecalho">
+
+            <span>ÁREA ADMINISTRATIVA</span>
+
+            <h1>Gerenciar inscrições</h1>
+
+            <p>
+                Acompanhe os profissionais interessados nas oportunidades
+                de voluntariado da OIAEU.
+            </p>
+
+        </section>
+
+
+        <!-- MENSAGENS -->
+
+        {% if request.args.get('mensagem') == 'atualizada' %}
+
+            <div class="mensagem-sucesso">
+
+                Inscrição atualizada com sucesso! ❤️
+
+            </div>
+
+        {% elif request.args.get('mensagem') == 'indisponivel' %}
+
+            <div class="mensagem-erro">
+
+                Não foi possível atualizar esta inscrição.
+                Verifique se ela ainda está pendente.
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- INDICADORES -->
+
+        <section class="inscricoes-indicadores">
+
+
+            <!-- TOTAL -->
+
+            <div class="inscricao-indicador-card">
+
+                <span>📋</span>
+
+                <h2>{{ total_inscricoes }}</h2>
+
+                <p>Total de inscrições</p>
+
+            </div>
+
+
+            <!-- PENDENTES -->
+
+            <div class="inscricao-indicador-card">
+
+                <span>⏳</span>
+
+                <h2>{{ total_pendentes }}</h2>
+
+                <p>Inscrições pendentes</p>
+
+            </div>
+
+
+            <!-- APROVADAS -->
+
+            <div class="inscricao-indicador-card">
+
+                <span>✅</span>
+
+                <h2>{{ total_aprovadas }}</h2>
+
+                <p>Inscrições aprovadas</p>
+
+            </div>
+
+
+            <!-- RECUSADAS -->
+
+            <div class="inscricao-indicador-card">
+
+                <span>❌</span>
+
+                <h2>{{ total_recusadas }}</h2>
+
+                <p>Inscrições recusadas</p>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- TITULO DA LISTA -->
+
+        <section class="lista-inscricoes-titulo">
+
+            <h2>Inscrições recebidas</h2>
+
+            <p>
+                Confira os dados dos voluntários e analise suas solicitações.
+            </p>
+
+        </section>
+
+
+        <!-- LISTA DE INSCRICOES -->
+
+        <section class="lista-inscricoes">
+
+
+            {% if inscricoes %}
+
+
+                {% for inscricao in inscricoes %}
+
+
+                    <article class="inscricao-card">
+
+
+                        <!-- TOPO DO CARTAO -->
+
+                        <div class="inscricao-topo">
+
+                            <div>
+
+                                <span class="inscricao-identificacao">
+                                    INSCRIÇÃO #{{ inscricao[0] }}
+                                </span>
+
+                                <h3>{{ inscricao[2] }}</h3>
+
+                            </div>
+
+
+                            <!-- STATUS -->
+
+                            {% if inscricao[8] == 'pendente' %}
+
+                                <span class="status-inscricao pendente">
+                                    Pendente
+                                </span>
+
+                            {% elif inscricao[8] == 'aprovado' %}
+
+                                <span class="status-inscricao aprovado">
+                                    Aprovada
+                                </span>
+
+                            {% else %}
+
+                                <span class="status-inscricao recusado">
+                                    Recusada
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- DADOS DO VOLUNTARIO -->
+
+                        <div class="inscricao-dados">
+
+
+                            <div>
+
+                                <strong>E-mail</strong>
+
+                                <p>{{ inscricao[3] }}</p>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>Telefone</strong>
+
+                                <p>{{ inscricao[4] }}</p>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>Formação profissional</strong>
+
+                                <p>{{ inscricao[5] }}</p>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>Habilidades</strong>
+
+                                <p>{{ inscricao[6] }}</p>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- OPORTUNIDADE -->
+
+                        <div class="inscricao-vaga">
+
+                            <strong>OPORTUNIDADE ESCOLHIDA</strong>
+
+                            <h4>{{ inscricao[7] }}</h4>
+
+                            <p>
+                                Área de atuação:
+                                {{ inscricao[11] }}
+                            </p>
+
+                        </div>
+
+
+                        <!-- DATA DA INSCRICAO -->
+
+                        <p class="inscricao-data">
+
+                            Inscrição realizada em:
+
+                            {{ inscricao[9].strftime('%d/%m/%Y às %H:%M') }}
+
+                        </p>
+
+
+                        <!-- ACOES DO ADMINISTRADOR -->
+
+                        {% if inscricao[8] == 'pendente' %}
+
+
+                            <div class="inscricao-acoes">
+
+
+                                <!-- APROVAR -->
+
+                                <form
+                                    action="{{ url_for('alterar_status_inscricao', id_inscricao=inscricao[0]) }}"
+                                    method="POST">
+
+                                    <input
+                                        type="hidden"
+                                        name="status"
+                                        value="aprovado">
+
+                                    <button
+                                        type="submit"
+                                        class="btn-aprovar-inscricao">
+
+                                        ✓ Aprovar inscrição
+
+                                    </button>
+
+                                </form>
+
+
+                                <!-- RECUSAR -->
+
+                                <form
+                                    action="{{ url_for('alterar_status_inscricao', id_inscricao=inscricao[0]) }}"
+                                    method="POST">
+
+                                    <input
+                                        type="hidden"
+                                        name="status"
+                                        value="recusado">
+
+                                    <button
+                                        type="submit"
+                                        class="btn-recusar-inscricao">
+
+                                        ✕ Recusar inscrição
+
+                                    </button>
+
+                                </form>
+
+
+                            </div>
+
+
+                        {% endif %}
+
+
+                    </article>
+
+
+                {% endfor %}
+
+
+            {% else %}
+
+
+                <!-- NENHUMA INSCRICAO -->
+
+                <div class="sem-inscricoes">
+
+                    <h2>Nenhuma inscrição recebida ainda ❤️</h2>
+
+                    <p>
+
+                        Quando os voluntários se inscreverem
+                        nas oportunidades disponíveis, as solicitações
+                        aparecerão aqui.
+
+                    </p>
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+    </main>
+
+</body>
+
+</html>

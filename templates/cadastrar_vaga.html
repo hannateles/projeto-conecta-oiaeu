@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cadastrar Vaga | Conecta OIAEU</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="pagina-cadastro-vaga">
+
+    <!-- CABECALHO -->
+
+    <header class="header">
+
+        <a href="/" class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}"
+                 alt="Logo Conecta OIAEU">
+        </a>
+
+        <a href="/painel" class="login-adm">
+            Voltar ao painel
+        </a>
+
+    </header>
+
+
+    <!-- CONTEUDO -->
+
+    <main class="vaga-container">
+
+        <section class="vaga-card">
+
+            <div class="vaga-titulo">
+
+                <span>ÁREA ADMINISTRATIVA</span>
+
+                <h1>Nova oportunidade!</h1>
+
+                <p>
+                    Cadastre uma oportunidade e conecte profissionais
+                    voluntários às necessidades da OIAEU.
+                </p>
+
+            </div>
+
+
+            <!-- FORMULARIO -->
+
+            <form action="/cadastrar-vaga" method="POST">
+
+                {% if erro %}
+                    <div class="mensagem-erro">
+                        {{ erro }}
+                    </div>
+                {% endif %}
+
+                {% if sucesso %}
+                    <div class="mensagem-sucesso">
+                        {{ sucesso }}
+                    </div>
+                {% endif %}
+
+
+                <!-- TITULO -->
+
+                <div class="campo">
+
+                    <label for="titulo">
+                        Título da oportunidade
+                    </label>
+
+                    <input
+                        type="text"
+                        id="titulo"
+                        name="titulo"
+                        placeholder="Ex.: Professor voluntário de inglês"
+                        maxlength="120"
+                        required>
+
+                </div>
+
+
+                <!-- DESCRICAO -->
+
+                <div class="campo">
+
+                    <label for="descricao">
+                        Descrição da oportunidade
+                    </label>
+
+                    <textarea
+                        id="descricao"
+                        name="descricao"
+                        placeholder="Descreva as atividades que serão realizadas..."
+                        maxlength="500"
+                        required></textarea>
+
+                </div>
+
+
+                <!-- AREA DE ATUACAO -->
+
+                <div class="campo">
+
+                    <label for="area_atuacao">
+                        Área de atuação
+                    </label>
+
+                    <select
+                        id="area_atuacao"
+                        name="area_atuacao"
+                        required>
+
+                        <option value="">
+                            Selecione uma área
+                        </option>
+
+                        <option value="Educação">
+                            Educação
+                        </option>
+
+                        <option value="Saúde">
+                            Saúde
+                        </option>
+
+                        <option value="Cultura">
+                            Cultura
+                        </option>
+
+                        <option value="Esporte">
+                            Esporte
+                        </option>
+
+                        <option value="Assistência Social">
+                            Assistência Social
+                        </option>
+
+                        <option value="Recreação">
+                            Recreação
+                        </option>
+
+                        <option value="Outra">
+                            Outra
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- REQUISITOS -->
+
+                <div class="campo">
+
+                    <label for="requisitos">
+                        Requisitos necessários
+                    </label>
+
+                    <textarea
+                        id="requisitos"
+                        name="requisitos"
+                        placeholder="Informe a formação, habilidades ou experiências desejadas..."
+                        maxlength="255"
+                        required></textarea>
+
+                </div>
+
+
+                <!-- BOTOES -->
+
+                <button type="submit" class="btn-publicar-vaga">
+                    Publicar oportunidade
+                </button>
+
+                <a href="/painel" class="btn-voltar-vaga">
+                    Cancelar e voltar ao painel
+                </a>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

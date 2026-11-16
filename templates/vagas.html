@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Oportunidades | Conecta OIAEU</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body class="pagina-vagas">
+
+    <!-- CABECALHO -->
+
+    <header class="header">
+
+        <a href="/" class="logo">
+            <img
+                src="{{ url_for('static', filename='images/logo.png') }}"
+                alt="Logo Conecta OIAEU">
+        </a>
+
+        {% if tipo_usuario == "administrador" %}
+
+            <a href="/painel" class="login-adm">
+                Voltar ao painel
+            </a>
+
+        {% else %}
+
+            <a href="/sair" class="login-adm">
+                Sair
+            </a>
+
+        {% endif %}
+
+    </header>
+
+
+    <!-- CONTEUDO -->
+
+    <main class="vagas-container">
+
+        <section class="vagas-cabecalho">
+
+            {% if tipo_usuario == "administrador" %}
+
+                <span>ÁREA ADMINISTRATIVA</span>
+
+                <h1>Gerenciar oportunidades</h1>
+
+                <p>
+                    Gerencie as oportunidades de voluntariado
+                    disponíveis na plataforma.
+                </p>
+
+                <a href="/cadastrar-vaga" class="btn-nova-vaga">
+                    + Cadastrar nova vaga
+                </a>
+
+            {% else %}
+
+                <span>OPORTUNIDADES DE VOLUNTARIADO</span>
+
+                <h1>Encontre sua oportunidade!</h1>
+
+                <p>
+                    Confira as oportunidades disponíveis e encontre
+                    uma forma de compartilhar seus talentos.
+                </p>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- MENSAGENS -->
+
+        {% if request.args.get('mensagem') == 'sucesso' %}
+
+            <div class="mensagem-sucesso">
+                Inscrição realizada com sucesso! ❤️
+            </div>
+
+        {% elif request.args.get('mensagem') == 'duplicada' %}
+
+            <div class="mensagem-erro">
+                Você já está inscrito nesta oportunidade!
+            </div>
+
+        {% elif request.args.get('mensagem') == 'indisponivel' %}
+
+            <div class="mensagem-erro">
+                Esta vaga não está mais disponível para inscrição.
+            </div>
+
+        {% endif %}
+
+
+        <!-- LISTA DE VAGAS -->
+
+        <section class="lista-vagas">
+
+            {% if vagas %}
+
+                {% for vaga in vagas %}
+
+                    <div class="vaga-admin-card">
+
+                        <div class="vaga-admin-topo">
+
+                            <h2>{{ vaga[1] }}</h2>
+
+                            {% if vaga[6] == 'aberta' %}
+
+                                <span class="status-aberta">
+                                    Aberta
+                                </span>
+
+                            {% else %}
+
+                                <span class="status-encerrada">
+                                    Encerrada
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <p class="vaga-area">
+                            <strong>Área de atuação:</strong>
+                            {{ vaga[3] }}
+                        </p>
+
+
+                        <p>
+                            <strong>Descrição:</strong>
+                            {{ vaga[2] }}
+                        </p>
+
+
+                        <p>
+                            <strong>Requisitos:</strong>
+                            {{ vaga[4] }}
+                        </p>
+
+
+                        <p class="vaga-data">
+                            <strong>Publicada em:</strong>
+                            {{ vaga[5].strftime('%d/%m/%Y') }}
+                        </p>
+
+
+                        <!-- ACOES DO ADMINISTRADOR -->
+
+                        {% if tipo_usuario == "administrador" %}
+
+                            <form
+                                action="{{ url_for('alterar_status_vaga', id_vaga=vaga[0]) }}"
+                                method="POST">
+
+                                {% if vaga[6] == 'aberta' %}
+
+                                    <input
+                                        type="hidden"
+                                        name="status"
+                                        value="encerrada">
+
+                                    <button
+                                        type="submit"
+                                        class="btn-encerrar">
+
+                                        Desativar vaga
+
+                                    </button>
+
+                                {% else %}
+
+                                    <input
+                                        type="hidden"
+                                        name="status"
+                                        value="aberta">
+
+                                    <button
+                                        type="submit"
+                                        class="btn-ativar">
+
+                                        Ativar novamente
+
+                                    </button>
+
+                                {% endif %}
+
+                            </form>
+
+
+                        <!-- ACAO DO VOLUNTARIO -->
+
+                        {% elif tipo_usuario == "voluntario" %}
+
+                            {% if vaga[6] == 'aberta' %}
+
+                                <form
+                                    action="{{ url_for('realizar_inscricao', id_vaga=vaga[0]) }}"
+                                    method="POST">
+
+                                    <button
+                                        type="submit"
+                                        class="btn-inscrever">
+
+                                        Quero me inscrever
+
+                                    </button>
+
+                                </form>
+
+                            {% endif %}
+
+                        {% endif %}
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="sem-vagas">
+
+                    {% if tipo_usuario == "administrador" %}
+
+                        <h2>Nenhuma vaga cadastrada</h2>
+
+                        <p>
+                            Cadastre uma nova oportunidade para começar.
+                        </p>
+
+                    {% else %}
+
+                        <h2>Nenhuma oportunidade disponível</h2>
+
+                        <p>
+                            No momento não existem vagas abertas.
+                            Volte em breve para conferir novas oportunidades!
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
