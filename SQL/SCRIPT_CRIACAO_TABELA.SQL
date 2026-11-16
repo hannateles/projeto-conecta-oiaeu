@@ -167,7 +167,10 @@ WHERE TABLE_NAME IN (
 ORDER BY TABLE_NAME, ORDINAL_POSITION;
 GO
 
-
+ALTER TABLE Voluntario
+ADD senha_hash VARCHAR(255) NULL,
+    ativo BIT NOT NULL DEFAULT 1;
+GO
 -- ============================================
 -- FIM DO SCRIPT
 -- PROJETO CONECTA OIAEU
